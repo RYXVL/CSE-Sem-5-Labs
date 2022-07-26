@@ -38,14 +38,6 @@ int main() {
 		fputc(c2, fptr3);
 		c2 = fgetc(fptr2);
 	}
-	// while(c1!=EOF) {
-	// 	fputc(c1, fptr3);
-	// 	c1 = fgetc(fptr1);
-	// }
-	// while(c2!=EOF) {
-	// 	fputc(c2, fptr3);
-	// 	c2 = fgetc(fptr2);
-	// }
 	fclose(fptr1);
 	fclose(fptr2);
 	fclose(fptr3);
