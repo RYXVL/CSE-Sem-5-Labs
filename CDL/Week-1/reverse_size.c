@@ -5,7 +5,7 @@ int main() {
 	FILE *fptr1, *fptr2;
 	char filename[50], c;
 	long int size;
-	printf("Enter the file name of the file to be reversed: ");
+	printf("Enter the name of the file to be reversed: ");
 	scanf("%s", filename);
 	fptr1 = fopen(filename, "r");
 	if(!fptr1) {
