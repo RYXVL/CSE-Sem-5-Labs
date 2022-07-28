@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
         exit(0);
     }
     while(1) {
-        while(read(in, c+i, 1) > 0 & count < 20) {
+        while(read(in, c+i, 1) > 0 && count < 20) {
             while(c[i]!='\n') {
                 i++;
                 read(in, c+i, 1);
