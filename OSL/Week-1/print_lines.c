@@ -18,10 +18,10 @@ int main(int argc, char const *argv[]) {
             read(in, c + i, 1);
         }
         if(strstr(c, argv[1])!=NULL) {
-            write(1, c, i);
-            write(1, "\n", 1);
+            write(1, c, i+1);
         }
         i = 0;
+        memset(c, 0, 100);
     }
     return 0;
 }
