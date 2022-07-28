@@ -1,0 +1,7 @@
+write(int fd, char *buff, int size_buff)
+prints the string in buff and returns length of the string printed.
+
+read(int fd, char *buff, int size_buff)
+reads the string in the buffer and returns the length of the string read.
+this length may or may not be same as the length of the buff array.
+
