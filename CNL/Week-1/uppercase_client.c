@@ -10,8 +10,8 @@
 #define PORTNO 6001
 
 int len, result, sockfd, n = 1;
-    struct sockaddr_in address;
-    char ch[256], buff[256];
+struct sockaddr_in address;
+char ch[256], buff[256];
 
 void createClientSocket() {
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
