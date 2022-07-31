@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 
+#define PORTNO 5001
+
     int sockfd, newsockfd, portno, clilen, n = 1;
     struct sockaddr_in seraddr, cliaddr;
     int i, value;
@@ -16,7 +18,7 @@ void createServerSocket() {
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     seraddr.sin_family = AF_INET;
     seraddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    seraddr.sin_port = htons(5400);
+    seraddr.sin_port = htons(PORTNO);
     bind(sockfd, (struct sockaddr*)&seraddr, sizeof(seraddr));
     listen(sockfd, 5);
 }
