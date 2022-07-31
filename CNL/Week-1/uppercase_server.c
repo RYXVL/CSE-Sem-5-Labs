@@ -10,10 +10,10 @@
 
 #define PORTNO 6001
 
-    int sockfd, newsockfd, portno, clilen, n = 1;
-    struct sockaddr_in seraddr, cliaddr;
-    int i, value;
-    char buff[256];
+int sockfd, newsockfd, portno, clilen, n = 1;
+struct sockaddr_in seraddr, cliaddr;
+int i, value;
+char buff[256];
 
 void createServerSocket() {
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
