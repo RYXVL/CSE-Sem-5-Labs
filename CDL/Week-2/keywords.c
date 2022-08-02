@@ -24,10 +24,6 @@ int main() {
 	c = fgetc(fptr1);
 	int i = 0, k = 0;
 	while(c!=EOF) {
-		if(!isalpha(c)) {
-			c = fgetc(fptr1);
-			while(!isalpha(c)) c = fgetc(fptr1);
-		}
 		if(isalpha(c)) {
 			buff[i++] = c;
 			c = fgetc(fptr1);
@@ -36,28 +32,19 @@ int main() {
 				c = fgetc(fptr1);
 			}
 			buff[i] = '\0';
-		}
-		for(int j = 0; j<11; j++) {
-			if(strcmp(buff, keys[j])==0) {
-				while(buff[k]) fputc(toupper(buff[k++]), fptr2);
-				break;
+			for(int j = 0; j<11; j++) {
+				if(strcmp(buff, keys[j])==0) {
+					while(buff[k]) fputc(toupper(buff[k++]), fptr2);
+					fputc('\n', fptr2);
+					break;
+				}
 			}
 		}
+		i=0;
 		k = 0;
-		fputc('\n', fptr2);
 		memset(buff, 0 ,50);
+		c = fgetc(fptr1);
 	}
-	// while(c!=EOF) {
-	// 	if(c=='#') {
-	// 		while(fgetc(fptr1)!='\n'){};
-	// 	}
-	// 	c = fgetc(fptr1);
-	// 	if(c=='#') continue;
-	// 	while(c!=EOF && c!='#') {
-	// 		fputc(c, fptr2);
-	// 		c = fgetc(fptr1);
-	// 	}
-	// }
 	fclose(fptr1);
 	fclose(fptr2);
 	return 0;
