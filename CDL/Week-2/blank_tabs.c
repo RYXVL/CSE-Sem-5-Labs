@@ -21,7 +21,7 @@ int main() {
             while(c==' ' || c=='\t')
                 c = fgetc(fptr1);
         }
-        while((c!=' ' || c!='\t') && c!=EOF) {
+        while(c!=' ' && c!='\t' && c!=EOF) {
             putc(c, fptr2);
             c = fgetc(fptr1);
         }
