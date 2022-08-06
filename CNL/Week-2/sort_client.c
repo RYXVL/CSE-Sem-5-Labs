@@ -32,12 +32,9 @@ void performClientTask() {
         scanf("%d", &(arr[i]));
     write(sockfd, arr, sizeof(arr));
     printf("Sorted array is: ");
-
-        n = read(sockfd, arr, sizeof(arr));
-        for(int i=0; i<5; i++)
-        printf("%d ", arr[i]);
-        // puts(buff);
-    // }
+    n = read(sockfd, arr, sizeof(arr));
+    for(int i=0; i<5; i++)
+    printf("%d ", arr[i]);
 }
 
 int main() {
