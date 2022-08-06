@@ -7,14 +7,11 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 
-# define PORTNO 5003
+# define PORTNO 4000
 
-int len, result, sockfd, n = 1;
-// int opd1, opd2, res;
-// char opr;
+int len, result, sockfd, n = 1, arr[4];
 struct sockaddr_in address;
-// char ch[256], res[256];
-int arr[3], res[1];
+char ch[256], buff[256];
 
 void createClientSocket() {
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -32,11 +29,11 @@ void createClientSocket() {
 void performClientTask() {
     printf("Enter the operand1 operator(+0, -1, *2, /3) operand2: ");
     for(int i=0; i<3; i++)
-    scanf("%d", &(arr[i]));
-    // printf("%d %d %d", arr[0], arr[1], arr[2]);
+        scanf("%d", &(arr[i]));
+    arr[3]=0;
     write(sockfd, arr, sizeof(arr));
-        n = read(sockfd,res, sizeof(res));
-        printf("Result is: %d", res[0]);
+    n = read(sockfd, arr, sizeof(arr));
+    printf("Res: %d ", arr[3]);
 }
 
 int main() {
