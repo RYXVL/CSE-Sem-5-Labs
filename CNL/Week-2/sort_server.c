@@ -29,7 +29,6 @@ void performServerSocket() {
         newsockfd=accept(sockfd,(struct sockaddr *)&cliaddr,&clilen);
         if(fork()==0){
             n = read(newsockfd,arr, sizeof(arr));
-            // printf(" \nMessage from Client %s \n",buf);
             for(int i=3; i>=0; i--) {
                 for(int j=0; j<=i; j++)
                     if(arr[j]>arr[j+1]) {
@@ -38,8 +37,6 @@ void performServerSocket() {
                         arr[j+1] = temp;
                     }
             }
-            // for(int i=0; i<5; i++)
-            // printf("%d", arr[i]);
             n = write(newsockfd,arr,sizeof(arr));
             close(newsockfd);
             exit(0);
