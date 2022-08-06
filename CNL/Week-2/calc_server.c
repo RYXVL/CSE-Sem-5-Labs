@@ -7,11 +7,11 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 
-# define PORTNO 5003
+# define PORTNO 4000
 
-int sockfd,newsockfd,portno,clilen,n=1;
+int sockfd,newsockfd,portno,clilen,n=1, arr[4];
 struct sockaddr_in seraddr,cliaddr;
-int arr[3], res[1];
+int i,value;
 
 void createServerSocket() {
     sockfd = socket(AF_INET,SOCK_STREAM,0);
@@ -28,21 +28,19 @@ void performServerSocket() {
         clilen = sizeof(clilen);
         newsockfd=accept(sockfd,(struct sockaddr *)&cliaddr,&clilen);
         if(fork()==0){
-            n = read(sockfd, arr, sizeof(arr));
-            printf("array %d %d %d", arr[0], arr[1], arr[2]);
-            if(arr[1]==0) res[0]=arr[0]+arr[2];
-            else if(arr[1]==1) res[0]=arr[0]-arr[2];
-            else if(arr[1]==2) res[0]=arr[0]*arr[2];
-            else if(arr[1]==3) res[0]=arr[0]/arr[2];
-            printf("result %d", res[0]);
-            n = write(newsockfd, res,sizeof(res));
+            n = read(newsockfd,arr, sizeof(arr));
+            if(arr[1]==0) arr[3]=arr[0]+arr[2];
+            else if(arr[1]==1) arr[3]=arr[0]-arr[2];
+            else if(arr[1]==2) arr[3]=arr[0]*arr[2];
+            else if(arr[1]==3) arr[3]=arr[0]/arr[2];
+            n = write(newsockfd,arr,sizeof(arr));
             close(newsockfd);
             exit(0);
         }
         else
         close(newsockfd);
-}
     }
+}
 
 
 int main() {
