@@ -3,5 +3,6 @@
 // this is a comment
 
 int main() {
+    a=b+2;
     return 0;
 }
