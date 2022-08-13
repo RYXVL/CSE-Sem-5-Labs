@@ -32,7 +32,7 @@ int findSymbol(char ch) {
 	return 0;
 }
 
-// char opr[][] = {'+', '-', '*', '/', '%', ++, --, };
+// char opr[7][2] = {'+', '-', '*', '/', '%', "++", "--"};
 
 struct token* getToken(FILE* fptr) {
 	struct token* newToken = (struct token*)malloc(sizeof(*newToken));
