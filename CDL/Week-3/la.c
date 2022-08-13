@@ -43,52 +43,62 @@ struct token* getToken(FILE* fptr) {
 		if(c==' ' || c=='\t') {
 			while(c==' ' || c=='\t') {
 				c=fgetc(fptr);
-				row++;
+				col++;
 			}
 			goto loop;
 		}
 		if(c == '\n') {
 			while(c=='\n') {
-				col++;
+				row++;
 				c=fgetc(fptr);
 			}
+			col = 1;
 			goto loop;
 		}
 		if(c=='#') {
 			while(c!='\n') {
 				c = fgetc(fptr);
-				row++;
+				col++;
 			}
-			col++;
-			c = fgetc(fptr);
 			row++;
+			col = 1;
+			c = fgetc(fptr);
 			goto loop;
 		}
 		if(c=='/') {
 			c = fgetc(fptr);
-			row++;
+			col++;
 			if(c=='/') {
 				while(c!='\n') {
 					c = fgetc(fptr);
-					row++;
+					col++;
 				}
+				row++;
+				col = 1;
 				c = fgetc(fptr);
 			}
 			else if(c=='*') {
 				while(1) {
-					while(c!='*')
+					while(c!='*') {
 						c = fgetc(fptr);
+						col++;
+					}
 					c = fgetc(fptr);
+					col++;
 					if(c=='/') break;
 					else continue;
 				}
 				c = fgetc(fptr);
+				col++;
 			}
 			goto loop;
 		}
 		if(isalpha(c)!=0) {
+			newToken->row = row;
+			newToken->col = col;
 			while(isalpha(c)!=0) {
 				buff[ind++] = c;
+				col++;
 				c = fgetc(fptr);
 			}
 			fseek(fptr, -1, SEEK_CUR);
@@ -97,31 +107,33 @@ struct token* getToken(FILE* fptr) {
 				if(strcmp(buff, keys[j])==0) {
 					strcpy(newToken->tokenName,buff);
 					memset(buff, 0, 50);
-					newToken->row = newToken->col = 123;
 					break;
 				}
 			}
 			if(j==32) {
 			    strcpy(newToken->tokenName,buff);
 				memset(buff, 0, 50);
-				newToken->row = newToken->col = 123;
 			}
 		}
 		else if(isdigit(c)!=0) {
+			newToken->row = row;
+			newToken->col = col;
 			while(isdigit(c)!=0) {
 				buff[ind++] = c;
+				col++;
 				c = fgetc(fptr);
 			}
 			fseek(fptr, -1, SEEK_CUR);
 			buff[ind]='\0';
 			strcpy(newToken->tokenName,buff);
 			memset(buff, 0, 50);
-			newToken->row = newToken->col = 123;
 		}
 		else if(findSymbol(c)==1) {
 			newToken->tokenName[0] = c;
 			newToken->tokenName[1] = '\0';
-			newToken->row = newToken->col = 123;
+			newToken->row = row;
+			newToken->col = col;
+			col++;
 		}
 	return newToken;
 }
