@@ -194,6 +194,12 @@ struct token* getToken(FILE* fptr) {
 						col++;
 						strcpy(newToken->tokenName,buff);
 					}
+					else if((buff[ind-1]=='+' && c=='+')||buff[ind-1]=='-' && c=='-') {
+						buff[ind++]=c;
+						buff[ind]='\0';
+						col++;
+						strcpy(newToken->tokenName,buff);
+					}
 					else {
 						buff[ind]='\0';
 						strcpy(newToken->tokenName,buff);
