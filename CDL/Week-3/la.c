@@ -9,7 +9,7 @@ struct token {
 };
 
 FILE *fptr;
-char filename[50], buffff[50], c;
+char filename[50], buff[50], c;
 int ind = 0;
 struct token *t;
 int row = 1, col = 1;
@@ -95,36 +95,36 @@ struct token* getToken(FILE* fptr) {
 			newToken->row = row;
 			newToken->col = col;
 			while(isalpha(c)!=0) {
-				buffff[ind++] = c;
+				buff[ind++] = c;
 				col++;
 				c = fgetc(fptr);
 			}
 			fseek(fptr, -1, SEEK_CUR);
-			buffff[ind]='\0';
+			buff[ind]='\0';
 			for(j = 0; j<32; j++) {
-				if(strcmp(buffff, keys[j])==0) {
-					strcpy(newToken->tokenName,buffff);
-					memset(buffff, 0, 50);
+				if(strcmp(buff, keys[j])==0) {
+					strcpy(newToken->tokenName,buff);
+					memset(buff, 0, 50);
 					break;
 				}
 			}
 			if(j==32) {
-			    strcpy(newToken->tokenName,buffff);
-				memset(buffff, 0, 50);
+			    strcpy(newToken->tokenName,buff);
+				memset(buff, 0, 50);
 			}
 		}
 		else if(isdigit(c)!=0) {
 			newToken->row = row;
 			newToken->col = col;
 			while(isdigit(c)!=0) {
-				buffff[ind++] = c;
+				buff[ind++] = c;
 				col++;
 				c = fgetc(fptr);
 			}
 			fseek(fptr, -1, SEEK_CUR);
-			buffff[ind]='\0';
-			strcpy(newToken->tokenName,buffff);
-			memset(buffff, 0, 50);
+			buff[ind]='\0';
+			strcpy(newToken->tokenName,buff);
+			memset(buff, 0, 50);
 		}
 		else if(findSymbol(c)==1) {
 			newToken->tokenName[0] = c;
@@ -136,79 +136,79 @@ struct token* getToken(FILE* fptr) {
 		else if(c=='"') {
 			newToken->row = row;
 			newToken->col = col;
-			buffff[ind++]=c;
+			buff[ind++]=c;
 			c = fgetc(fptr);
 			col++;
 			while(c!='"') {
-				buffff[ind++]=c;
+				buff[ind++]=c;
 				c = fgetc(fptr);
 				col++;
 			}
-			buffff[ind++]=c;
-			buffff[ind]='\0';
+			buff[ind++]=c;
+			buff[ind]='\0';
 			col++;
-			strcpy(newToken->tokenName, buffff);
+			strcpy(newToken->tokenName, buff);
 		}
 		else {
 			newToken->row = row;
 			newToken->col = col;
 			if(c=='=') {
-				buffff[ind++]=c;
+				buff[ind++]=c;
 				c = fgetc(fptr);
 				col++;
 				if(c=='=') {
-					buffff[ind++]=c;
-					buffff[ind]='\0';
-					strcpy(newToken->tokenName,buffff);
+					buff[ind++]=c;
+					buff[ind]='\0';
+					strcpy(newToken->tokenName,buff);
 				}
 				else {
-					buffff[ind]='\0';
-					strcpy(newToken->tokenName,buffff);
+					buff[ind]='\0';
+					strcpy(newToken->tokenName,buff);
 					fseek(fptr, -1, SEEK_CUR);
 				}
  			}
 			else if(c=='<'||c=='>'||c=='!') {
-				buffff[ind++]=c;
+				buff[ind++]=c;
 				c = fgetc(fptr);
 				col++;
 				if(c=='=') {
-					buffff[ind++]=c;
-					buffff[ind]='\0';
-					strcpy(newToken->tokenName,buffff);
+					buff[ind++]=c;
+					buff[ind]='\0';
+					strcpy(newToken->tokenName,buff);
 				}
 				else {
-					buffff[ind]='\0';
-					strcpy(newToken->tokenName,buffff);
+					buff[ind]='\0';
+					strcpy(newToken->tokenName,buff);
 					col--;
 					fseek(fptr, -1, SEEK_CUR);
 				}
 			}
 			else if(c=='+'||c=='-'||c=='/'||c=='*') {
-				buffff[ind++]=c;
+				buff[ind++]=c;
 				c = fgetc(fptr);
 				col++;
-				if(buffff[ind-1]=='+'||buffff[ind-1]=='-') {
+				if(buff[ind-1]=='+'||buff[ind-1]=='-') {
 					if(c=='+'||c=='=') {
-						buffff[ind++]=c;
-						buffff[ind]='\0';
+						buff[ind++]=c;
+						buff[ind]='\0';
 						col++;
-						strcpy(newToken->tokenName,buffff);
+						strcpy(newToken->tokenName,buff);
 					}
 					else {
-						buffff[ind]='\0';
-						strcpy(newToken->tokenName,buffff);
+						buff[ind]='\0';
+						strcpy(newToken->tokenName,buff);
 						fseek(fptr, -1, SEEK_CUR);
 					}
 				}
-				else if(buffff[ind-1]=='*'||buffff[ind-1]=='/') {
+				else if(buff[ind-1]=='*'||buff[ind-1]=='/') {
 					if(c=='=') {
-						buffff[ind++]=c;
-						buffff[ind]='\0';
-						strcpy(newToken->tokenName,buffff);
+						buff[ind++]=c;
+						buff[ind]='\0';
+						strcpy(newToken->tokenName,buff);
 					}
 					else {
-						buffff[ind]='\0';
-						strcpy(newToken->tokenName,buffff);
+						buff[ind]='\0';
+						strcpy(newToken->tokenName,buff);
 						col--;
 						fseek(fptr, -1, SEEK_CUR);
 					}
