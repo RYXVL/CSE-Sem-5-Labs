@@ -133,6 +133,22 @@ struct token* getToken(FILE* fptr) {
 			newToken->col = col;
 			col++;
 		}
+		else if(c=='"') {
+			newToken->row = row;
+			newToken->col = col;
+			buffff[ind++]=c;
+			c = fgetc(fptr);
+			col++;
+			while(c!='"') {
+				buffff[ind++]=c;
+				c = fgetc(fptr);
+				col++;
+			}
+			buffff[ind++]=c;
+			buffff[ind]='\0';
+			col++;
+			strcpy(newToken->tokenName, buffff);
+		}
 		else {
 			newToken->row = row;
 			newToken->col = col;
@@ -148,7 +164,6 @@ struct token* getToken(FILE* fptr) {
 				else {
 					buffff[ind]='\0';
 					strcpy(newToken->tokenName,buffff);
-					col--;
 					fseek(fptr, -1, SEEK_CUR);
 				}
  			}
@@ -176,12 +191,12 @@ struct token* getToken(FILE* fptr) {
 					if(c=='+'||c=='=') {
 						buffff[ind++]=c;
 						buffff[ind]='\0';
+						col++;
 						strcpy(newToken->tokenName,buffff);
 					}
 					else {
 						buffff[ind]='\0';
 						strcpy(newToken->tokenName,buffff);
-						col--;
 						fseek(fptr, -1, SEEK_CUR);
 					}
 				}
