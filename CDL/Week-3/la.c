@@ -123,7 +123,7 @@ struct token* getToken(FILE* fptr) {
 			}
 			fseek(fptr, -1, SEEK_CUR);
 			buff[ind]='\0';
-			strcpy(newToken->tokenName,buff);
+			strcpy(newToken->tokenName,"NUM");
 			memset(buff, 0, 50);
 		}
 		else if(findSymbol(c)==1) {
