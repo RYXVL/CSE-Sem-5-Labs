@@ -109,7 +109,7 @@ struct token* getToken(FILE* fptr) {
 				}
 			}
 			if(j==32) {
-			    strcpy(newToken->tokenName,buff);
+			    strcpy(newToken->tokenName,"id");
 				memset(buff, 0, 50);
 			}
 		}
