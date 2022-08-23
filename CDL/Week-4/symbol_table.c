@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#define MAX_HASH_SIZE 13
+
 struct token {
 	char tokenName[100];
 	int row, col;
@@ -10,13 +12,104 @@ struct token {
 	int size;
 	char returntype[20];
 };
+//////////////////////////
+typedef struct node* Nodeptr;
+typedef struct node {
+	char lexemeName[100];
+	char type[20];
+	int size;
+	char returntype[20];
+	Nodeptr next;
+} node;
 
-struct token* symbol[1000];
+// Nodeptr mainNode;
 
-struct token* getNode(struct token* tempt) {
-	struct token* newnode = (struct token*)malloc(sizeof(*newnode));
-	newnode->
+Nodeptr hashSymbol[MAX_HASH_SIZE];
+
+int getHashValue(char lexemeName[100]) {
+	int sum = 0;
+	int i = 0;
+	while(lexemeName[i]) {
+		sum+=(lexemeName[i]*i);
+		i++;
+	}
+	return (sum%MAX_HASH_SIZE);
 }
+
+void displaySymbolTable(){
+	printf("\nSymbol table\n< LexemeName, Type, Size, ReturnType>\n\n");
+	for(int i=0;i<MAX_HASH_SIZE;i++){
+		if(hashSymbol[i] == NULL) {
+			// printf("Check %d\n", i);
+			continue;
+		}
+		else{
+			Nodeptr cur = hashSymbol[i];
+			while(cur){
+				printf(" %s\t %s\t %d\t %s\t\n",cur->lexemeName, cur->type, cur->size, cur->returntype);
+				cur = cur->next;
+			}
+		}
+	}
+}
+
+//searching in the symbol table
+int searchSymbolTable(char lexemeName[100], char type[20], char returntype[20]){
+	int index = getHashValue(lexemeName);
+	if(hashSymbol[index] == NULL){
+		// printf("check %d\n", index);
+		return -1;
+	}
+	Nodeptr cur = hashSymbol[index];
+	int i = 0;
+	while(cur != NULL){
+		if(strcmp(lexemeName, cur->lexemeName) == 0)
+		return i;
+		cur = cur->next;
+		i++;
+	}
+	return -1;
+}
+
+void insertSymbolTable(char lexemeName[100], char type[20], char returntype[20]){
+	if(searchSymbolTable(lexemeName, type, returntype) == -1){
+		Nodeptr n = (Nodeptr)malloc(sizeof(*n));
+		// char *str = (char *)calloc(strlen(lexemeName)+1, sizeof(char));
+		// strcpy(str, lexemeName);
+		strcpy(n->lexemeName, lexemeName);
+		n->next = NULL;
+		// char *typee = (char *)calloc(strlen(type)+1, sizeof(char));
+		// strcpy(typee, type);
+		strcpy(n->type, type);
+		if(strcmp(type, "int") == 0)
+			n->size = 4;
+		else if(strcmp(type, "double") == 0)
+			n->size = 8;
+		else if(strcmp(type, "char") == 0)
+			n->size = 1;
+		else if(strcmp(type, "float") == 0)
+			n->size = 4;
+		else
+			n->size = 0;
+		strcpy(n->returntype, returntype);
+		int index = getHashValue(lexemeName);
+		// printf("Hash Index %d\n", index);
+		if(hashSymbol[index] == NULL){
+			hashSymbol[index] = n;
+			return;
+		}
+		Nodeptr cur = hashSymbol[index];
+		while(cur->next != NULL)
+			cur = cur->next;
+		cur->next = n;
+	}
+}
+
+//////////////////////////////////
+// struct token* getNode(struct token* tempt) {
+// 	struct token* newnode = (struct token*)malloc(sizeof(*newnode));
+	// newnode->
+// }
 
 FILE *fptr;
 char filename[50], buff[50], dbuff[50], c;
@@ -26,7 +119,7 @@ int row = 1, col = 1;
 int j;
 int flag; // for storing the types of variables
 // int count = 0;
-char tempbuff[1024];
+// char tempbuff[1024];
 
 char keys[32][10] = {"auto", "break", "case", "char", 
 					   "const", "continue", "default", "do", 
@@ -50,7 +143,7 @@ struct token* getToken(FILE* fptr) {
 	ind = 0;
 	c = fgetc(fptr);
 	loop:
-		if(c==EOF) exit(0);
+		if(c==EOF) return NULL;
 		if(c==' ' || c=='\t') {
 			while(c==' ' || c=='\t') {
 				c=fgetc(fptr);
@@ -118,7 +211,7 @@ struct token* getToken(FILE* fptr) {
 				if(strcmp(buff, keys[j])==0) {
 					strcpy(newToken->tokenName,buff);
 					////////////////////////////////////////
-					if(strcmp(buff, "char")==0 || strcmp(buff, "double")==0 || strcmp(buff, "float")==0 || strcmp(buff, "int")==0) {
+					if(strcmp(buff, "char")==0 || strcmp(buff, "double")==0 || strcmp(buff, "float")==0 || strcmp(buff, "int")==0 || strcmp(buff, "void")==0) {
 						strcpy(dbuff, buff); // copy the data type
 						strcpy(newToken->type, dbuff);
 						strcpy(newToken->returntype, dbuff);
@@ -157,16 +250,20 @@ struct token* getToken(FILE* fptr) {
 					else if(strcmp(dbuff, "int")==0) newToken->size = sizeof(int);
 					else newToken->size = 0;
 				}
-				if(c==';' || c=='(') {
-					memset(dbuff, 0, 50);
-					flag = 0;
-				}
+				
 				///////////////////////////////////////
 				// tempbuff[0]='i';
 				// tempbuff[1]='d';
 				// char tempc =(count+'0');
 			    strcpy(newToken->tokenName, "id");
+			    insertSymbolTable(buff, dbuff, dbuff);
 				memset(buff, 0, 50);
+				if(c==';' || c=='(') {
+					memset(dbuff, 0, 50);
+					flag = 0;
+				}
+				// printf("buff<; %s; dbuff; %s\n", buff, dbuff);
+				
 			}
 		}
 		else if(isdigit(c)!=0) {
@@ -301,6 +398,9 @@ struct token* getToken(FILE* fptr) {
 }
 
 int main() {
+	// mainNode = (Nodeptr)malloc(sizeof(*mainNode));
+	for(int i=0; i<MAX_HASH_SIZE; i++)
+		hashSymbol[i] == NULL;
 	printf("Enter the first file to be opened: ");
 	scanf("%s", filename);
 	fptr = fopen(filename, "r");
@@ -310,8 +410,10 @@ int main() {
 	}
 	while(1) {
 		t = getToken(fptr);
+		if(!t) break;
 		printf("<%s, %d, %d, %s, %d, %s>\n", t->tokenName, t->row, t->col, t->type, t->size, t->returntype);
 	}
+	displaySymbolTable();
 	fclose(fptr);
 	return 0;
 }
