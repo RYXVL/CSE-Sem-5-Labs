@@ -9,6 +9,7 @@ struct token {
 	char tokenName[100];
 	int row, col;
 };
+
 typedef struct node* Nodeptr;
 typedef struct node {
 	char lexemeName[100];
@@ -191,29 +192,26 @@ struct token* getToken(FILE* fptr) {
 				if(strcmp(buff, keys[j])==0) {
 					strcpy(newToken->tokenName,buff);
 					if(strcmp(buff, "char")==0 || strcmp(buff, "double")==0 || strcmp(buff, "float")==0 || strcmp(buff, "int")==0 || strcmp(buff, "void")==0) {
-						strcpy(dbuff, buff); // copy the data type
+						strcpy(dbuff, buff);
 						flag = 1;
 					}
 					memset(buff, 0, 50);
 					break;
 				}
 			}
-			if(j==32) {
+            if(j==32) {
 				c = fgetc(fptr);
 				fseek(fptr, -1, SEEK_CUR);
 				if(flag==1) {
-					if(c=='(') strcpy(buff, "FUNC");
+					if(c=='(') insertSymbolTable(buff, "FUNC", dbuff);
+                    else insertSymbolTable(buff, dbuff, "NULL");
 				}
-				
 			    strcpy(newToken->tokenName, "id");
-			    if(flag==1)
-			    insertSymbolTable(buff, dbuff, dbuff);
 				memset(buff, 0, 50);
 				if(c==';' || c=='(') {
 					memset(dbuff, 0, 50);
 					flag = 0;
 				}
-				
 			}
 		}
 		else if(isdigit(c)!=0) {
