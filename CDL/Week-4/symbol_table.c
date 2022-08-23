@@ -255,7 +255,12 @@ struct token* getToken(FILE* fptr) {
 				// tempbuff[0]='i';
 				// tempbuff[1]='d';
 				// char tempc =(count+'0');
+				// if (flag==0) {
+					// strcpy(buff, "keyword");
+				// 	strcpy(dbuff, "keyword");
+				// }
 			    strcpy(newToken->tokenName, "id");
+			    if(flag==1)
 			    insertSymbolTable(buff, dbuff, dbuff);
 				memset(buff, 0, 50);
 				if(c==';' || c=='(') {
