@@ -8,9 +8,9 @@
 struct token {
 	char tokenName[100];
 	int row, col;
-	char type[20];
-	int size;
-	char returntype[20];
+	// char type[20];
+	// int size;
+	// char returntype[20];
 };
 //////////////////////////
 typedef struct node* Nodeptr;
@@ -213,20 +213,20 @@ struct token* getToken(FILE* fptr) {
 					////////////////////////////////////////
 					if(strcmp(buff, "char")==0 || strcmp(buff, "double")==0 || strcmp(buff, "float")==0 || strcmp(buff, "int")==0 || strcmp(buff, "void")==0) {
 						strcpy(dbuff, buff); // copy the data type
-						strcpy(newToken->type, dbuff);
-						strcpy(newToken->returntype, dbuff);
+						// strcpy(newToken->type, dbuff);
+						// strcpy(newToken->returntype, dbuff);
 						// newToken->size = -1;
-						if(strcmp(buff, "char")==0) newToken->size = sizeof(char);
-						else if(strcmp(buff, "double")==0) newToken->size = sizeof(double);
-						else if(strcmp(buff, "float")==0) newToken->size = sizeof(float);
-						else if(strcmp(buff, "int")==0) newToken->size = sizeof(int);
+						// if(strcmp(buff, "char")==0) newToken->size = sizeof(char);
+						// else if(strcmp(buff, "double")==0) newToken->size = sizeof(double);
+						// else if(strcmp(buff, "float")==0) newToken->size = sizeof(float);
+						// else if(strcmp(buff, "int")==0) newToken->size = sizeof(int);
 						flag = 1;
 					}
-					else {
-						strcpy(newToken->type, "null");
-						strcpy(newToken->returntype, "null");
-						newToken->size = -1;
-					}
+					// else {
+					// 	strcpy(newToken->type, "null");
+					// 	strcpy(newToken->returntype, "null");
+					// 	newToken->size = -1;
+					// }
 					///////////////////////////////////////
 					memset(buff, 0, 50);
 					break;
@@ -240,15 +240,15 @@ struct token* getToken(FILE* fptr) {
 				if(flag==1) {
 					// printf("\n%s %s\n", buff, dbuff);
 					// printf("\n%s\n", dbuff);
-					if(c=='(') strcpy(newToken->type, "FUNC");
-					else strcpy(newToken->type, dbuff);
-					// printf("%s", dbuff);
-					strcpy(newToken->returntype, dbuff);
-					if(strcmp(dbuff, "char")==0) newToken->size = sizeof(char);
-					else if(strcmp(dbuff, "double")==0) newToken->size = sizeof(double);
-					else if(strcmp(dbuff, "float")==0) newToken->size = sizeof(float);
-					else if(strcmp(dbuff, "int")==0) newToken->size = sizeof(int);
-					else newToken->size = 0;
+					if(c=='(') strcpy(buff, "FUNC");
+					// else strcpy(newToken->type, dbuff);
+					// // printf("%s", dbuff);
+					// strcpy(newToken->returntype, dbuff);
+					// if(strcmp(dbuff, "char")==0) newToken->size = sizeof(char);
+					// else if(strcmp(dbuff, "double")==0) newToken->size = sizeof(double);
+					// else if(strcmp(dbuff, "float")==0) newToken->size = sizeof(float);
+					// else if(strcmp(dbuff, "int")==0) newToken->size = sizeof(int);
+					// else newToken->size = 0;
 				}
 				
 				///////////////////////////////////////
@@ -273,9 +273,9 @@ struct token* getToken(FILE* fptr) {
 		}
 		else if(isdigit(c)!=0) {
 			//////////////
-			strcpy(newToken->type, "int");
-						strcpy(newToken->returntype, "int");
-						newToken->size = sizeof(int);
+			// strcpy(newToken->type, "int");
+			// 			strcpy(newToken->returntype, "int");
+			// 			newToken->size = sizeof(int);
 						////////////////
 			newToken->row = row;
 			newToken->col = col;
@@ -291,9 +291,9 @@ struct token* getToken(FILE* fptr) {
 		}
 		else if(findSymbol(c)==1) {
 			/////////////
-			strcpy(newToken->type, "null");
-						strcpy(newToken->returntype, "null");
-						newToken->size = -1;
+			// strcpy(newToken->type, "null");
+			// 			strcpy(newToken->returntype, "null");
+			// 			newToken->size = -1;
 						/////////////
 			newToken->tokenName[0] = c;
 			newToken->tokenName[1] = '\0';
@@ -303,9 +303,9 @@ struct token* getToken(FILE* fptr) {
 		}
 		else if(c=='"') {
 			/////////////
-			strcpy(newToken->type, "int");
-						strcpy(newToken->returntype, "int");
-						newToken->size = -1;
+			// strcpy(newToken->type, "int");
+			// 			strcpy(newToken->returntype, "int");
+			// 			newToken->size = -1;
 						/////////////
 			newToken->row = row;
 			newToken->col = col;
@@ -324,9 +324,9 @@ struct token* getToken(FILE* fptr) {
 		}
 		else {
 			/////////////
-			strcpy(newToken->type, "int");
-						strcpy(newToken->returntype, "int");
-						newToken->size = -1;
+			// strcpy(newToken->type, "int");
+			// 			strcpy(newToken->returntype, "int");
+			// 			newToken->size = -1;
 						/////////////
 			newToken->row = row;
 			newToken->col = col;
@@ -416,7 +416,7 @@ int main() {
 	while(1) {
 		t = getToken(fptr);
 		if(!t) break;
-		printf("<%s, %d, %d, %s, %d, %s>\n", t->tokenName, t->row, t->col, t->type, t->size, t->returntype);
+		printf("<%s, %d, %d>\n", t->tokenName, t->row, t->col);
 	}
 	displaySymbolTable();
 	fclose(fptr);
