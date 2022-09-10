@@ -17,3 +17,8 @@ On Link 1 -> show arp
 ====================
 
 PC4 -> ip 10.0.1.11 (Error as IP cannot be changed.)
+
+====================
+
+PC1 -> ping 10.0.1.13
+PC3 -> ping 10.0.1.11 –c 5
