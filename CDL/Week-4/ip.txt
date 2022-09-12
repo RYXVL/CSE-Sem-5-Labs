@@ -4,5 +4,13 @@
 
 int main() {
 	int a, b, c;
+	a+=b;
+	c==b;
+	// single line comment
+	d!=e;
+	/* this is a
+	comment
+	rip you
+	*/
 	return 0;
 }
