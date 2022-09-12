@@ -165,7 +165,7 @@ struct token* getToken(FILE* fptr) {
 			else if(c=='*') {
 				while(1) {
 					while(c!='*') {
-						if(c=='\n') { //////////////////////
+						if(c=='\n') {
 							row++;
 							col = 1;
 						}
