@@ -1,0 +1,24 @@
+On Respective PC's
+
+ip 10.0.1.11
+ip 10.0.1.12
+ip 10.0.1.13
+ip 10.0.1.14
+
+====================
+
+PC1 -> show arp
+On Link 1 -> ip.addr == 10.0.1.12
+PC1 -> ping 10.0.1.12
+On Link 1 -> arp
+On Link 1 -> arp -a (Clears ARP Cache)
+On Link 1 -> show arp
+
+====================
+
+PC4 -> ip 10.0.1.11 (Error as IP cannot be changed.)
+
+====================
+
+PC1 -> ping 10.0.1.13
+PC3 -> ping 10.0.1.11 –c 5
