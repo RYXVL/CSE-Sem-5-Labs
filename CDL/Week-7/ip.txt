@@ -1,0 +1,6 @@
+#include <stdio>
+
+// this is a comment
+
+main() {
+}$
