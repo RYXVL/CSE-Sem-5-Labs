@@ -1,0 +1,77 @@
+R1 SERVER////////////////////////////////////////////////
+
+R1#enable 
+R1#conf t
+R1(config)#hostname R1
+R1(config)#interface f 0/0
+R1(config-if)#ip address 10.10.10.1 255.255.255.0
+R1(config-if)#no shut
+R1(config-if)#do wr
+R1(config-if)#end 
+
+R1#conf t
+R1(config)#ip dns server 
+R1(config)#ip host loopback.R1.com 2.2.2.2
+R1(config)#interface loopback 1
+R1(config-if)#ip address 2.2.2.2 255.255.255.255
+R1(config-if)#end
+R1#ping loopback.R1.com
+
+R2//////////////////////////////////////////////////////
+
+R2#enable
+R2#conf t
+R2(config)#hostname R2
+R2(config)#int f 0/0
+R2(config-if)#ip address 10.10.10.2 255.255.255.0
+R2(config-if)#no shut 
+R2(config-if)#do wr
+R2(config-if)#end
+
+R2#conf t
+R2(config)#ip domain lookup
+R2(config)#ip name-server 10.10.10.1
+R2(config)#ip route 0.0.0.0 0.0.0.0 10.10.10.1
+R2(config)#end
+R2#ping loopback.R1.com repeat 3
+
+R3/////////////////////////////////////////////////////////////////////
+
+R3#enable 
+R3#conf t
+R3(config)#hostname R3
+R3(config)#int f 0/0
+R3(config-if)#ip address 10.10.10.3 255.255.255.0
+R3(config-if)#no shut 
+R3(config-if)#do w
+R3(config-if)#do wr
+R3(config-if)#do wr
+R3(config-if)#end 
+
+R3#conf t
+R3(config)#ip domain lookup 
+R3(config)#ip name-server 10.10.10.1
+R3(config)#ip route 0.0.0.0 0.0.0.0 10.10.10.1
+R3(config)#end
+R3#ping loopback.R1.com repeat 3
+
+R4//////////////////////////////////////////////////////////////////////
+
+R4#enable 
+R4#conf t 
+R4(config)#hostname R2
+R2(config)#int f 0/0
+R2(config-if)#hostname R4
+R4(config)#hostname R4
+R4(config)#int f 0/0  
+R4(config-if)#ip address 10.10.10.4 255.255.255.0
+R4(config-if)#no shut 
+R4(config-if)#do wr
+R4(config-if)#end 
+
+R4#conf t
+R4(config)#ip domain lookup
+R4(config)#ip name-server 10.10.10.1
+R4(config)#ip route 0.0.0.0 0.0.0.0 10.10.10.1
+R4(config)#end 
+R4#ping loopback.R1.com repeat 3
