@@ -3,6 +3,12 @@
 #include <string.h>
 #include "la.c"
 
+///////////////////////////////////
+void unGetNextToken(FILE* fptr) {
+	fseek(fptr, -strlen(t->tokenName), SEEK_CUR);
+}
+///////////////////////////////////
+
 void invalid() {
 	printf("FALIED");
 	exit(0);
@@ -44,6 +50,13 @@ void declarations() {
 			declarations();
 		}
 	}
+	else { ///////////////////////////////////
+		// printf(" %s ", t->tokenName);
+		// unGetNextToken(fptr);
+		// t = getToken(fptr);
+		// printf(" %s ", t->tokenName);
+		// printf("check");
+	}
 }
 
 void assign_stat_prime() {
@@ -61,9 +74,12 @@ void assign_stat_prime() {
 }
 
 void assign_stat() {
+	// printf("assign check %s", t->tokenName); /////////////////////
 	if(strcmp("id", t->tokenName)==0) {
+		// printf(" n %c n ", fgetc(fptr));
 		t = getToken(fptr);
 		printToken();
+		// printf("after assign check %s", t->tokenName); /////////////////////
 		if(strcmp("=", t->tokenName)==0) {
 			assign_stat_prime();
 		}
@@ -90,7 +106,9 @@ void program() {
 				printToken();
 				if(strcmp("{", t->tokenName)==0) {
 					declarations();
+					// printf(" check after\n"); /////////////////////////
 					assign_stat();
+					// printf(" check after prime\n"); /////////////////////////
 					t = getToken(fptr);
 					printToken();
 					if(strcmp("}", t->tokenName)==0) {

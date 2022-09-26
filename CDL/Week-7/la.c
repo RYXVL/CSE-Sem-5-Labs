@@ -217,16 +217,20 @@ struct token* getToken(FILE* fptr) {
             if(j==33) {
 				c = fgetc(fptr);
 				fseek(fptr, -1, SEEK_CUR);
+				
 				if(flag==1) {
 					if(c=='(') insertSymbolTable(buff, "FUNC", dbuff);
                     else insertSymbolTable(buff, dbuff, "NULL");
 				}
+				printf("buff %s\n", buff); //////////////////////
+				printf("char %c\n", c); ///////////////
 			    strcpy(newToken->tokenName, "id");
 				memset(buff, 0, 50);
 				if(c==';' || c=='(') {
 					memset(dbuff, 0, 50);
 					flag = 0;
 				}
+				// else fseek(fptr, -1, SEEK_CUR); /////////////////
 			}
 		}
 		else if(isdigit(c)!=0) {

@@ -3,6 +3,7 @@
 // this is a comment
 
 main() {
-int abc, bc;
-abc=bc;
+    int abc, bc;
+    char xyz;
+    abc=5;
 }$
