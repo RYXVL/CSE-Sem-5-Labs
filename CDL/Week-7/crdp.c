@@ -3,6 +3,44 @@
 #include <string.h>
 #include "la.c"
 
+char* firstProgram = "main";
+char* followProgram = "$";
+
+// char firstDeclaration[3][10] = {"int", "char", "@"};
+char firstDeclaration[2][10] = {"int", "char"};
+int findfirstDeclaration(char *str) {
+	for(int i=0; i<2; i++)
+		if(strcmp(firstDeclaration[i], str)==0) return i;
+	return -1;
+}
+char* followDeclaration = "id";
+
+char firstDataType[2][10] = {"int", "char"};
+// void findfirstDataType(char *str) {
+// 	for(int i=0; i<2; i++)
+// 		if(strcmp(firstDataType[i], str)==0) return i;
+// 	return -1;
+// }
+char* followDataType = "id";
+
+char* firstIDList = "id";
+char* followIDList = ";";
+
+// char firstIDListPrime[2][10] = {",", "@"};
+char* firstIDListPrime = ",";
+char* followIDListPrime = ";";
+
+char* firstAss = "id";
+char* followAss = "}";
+
+char firstAssPrime[2][10] = {"id", "NUM"};
+int findAssPrime(char *str) {
+	for(int i=0; i<2; i++)
+		if(strcmp(firstAssPrime[i], str)==0) return i;
+	return -1;
+}
+char* followAssPrime = "}";
+
 ///////////////////////////////////
 void unGetNextToken(FILE* fptr) {
 	fseek(fptr, -strlen(t->tokenName), SEEK_CUR);
@@ -14,68 +52,88 @@ void invalid() {
 	exit(0);
 }
 
-data_type() {
-	if(strcmp("int", t->tokenName)==0 || strcmp("char", t->tokenName)==0) {
-		return;
-	}
-	else invalid();
-}
+// data_type() {
+// 	if(findfirstDataType(t->tokenName)!=-1) {
+// 		return;
+// 	}
+// 	else invalid();
+// }
 
 identifier_list_prime() {
-	if(strcmp(",", t->tokenName)==0) {
+	t = getToken(fptr);
+	printToken();
+	if(strcmp(firstIDListPrime, t->tokenName)==0) {
 		identifier_list();
+	}
+	else if(strcmp(followIDListPrime, t->tokenName)==0) {
+		return;
+	}
+	else {
+		printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, ",", ";");
+		exit(0);
 	}
 }
 
 identifier_list() {
 	t = getToken(fptr);
 	printToken();
-	if(strcmp("id", t->tokenName)==0) {
-		t = getToken(fptr);
-		printToken();
-		if(strcmp(",", t->tokenName)==0) {
+	if(strcmp(t->tokenName, firstIDList)==0) {
+		// t = getToken(fptr);
+		// printToken();
+		// if(strcmp(",", t->tokenName)==0) {
 			identifier_list_prime();
-		}
+		// }
 	}
-	else invalid();
+	else {
+		printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "id");
+		exit(0);
+	}
 }
 
 void declarations() {
 	t = getToken(fptr);
 	printToken();
-	if(strcmp("int", t->tokenName)==0 || strcmp("char", t->tokenName)==0) {
-		data_type();
+	if(findfirstDeclaration(t->tokenName)!=-1) {
+		// data_type();
 		identifier_list();
 		if(strcmp(";", t->tokenName)==0) {
 			declarations();
 		}
+		else {
+			printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, ";");
+			exit(0);
+		}
 	}
-	else { ///////////////////////////////////
-		// printf(" %s ", t->tokenName);
-		// unGetNextToken(fptr);
-		// t = getToken(fptr);
-		// printf(" %s ", t->tokenName);
-		// printf("check");
+	else if(strcmp(followDeclaration, t->tokenName)==0) return;
+	else {
+		printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\" or \"%s\".\n", t->row, t->col, "int", "char", "id");
+		exit(0);
 	}
 }
 
 void assign_stat_prime() {
 	t = getToken(fptr);
 	printToken();
-	if(strcmp("id", t->tokenName)==0 || strcmp("NUM", t->tokenName)==0) {
+	if(findAssPrime(t->tokenName)!=-1) {
 		t = getToken(fptr);
 		printToken();
 		if(strcmp(";", t->tokenName)==0) {
 			return;
 		}
-		else invalid();
+		else {
+			printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, ";");
+			exit(0);
+		}
 	}
-	else invalid();
+	else {
+		printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, "id", "NUM");
+		exit(0);
+	}
 }
 
 void assign_stat() {
 	// printf("assign check %s", t->tokenName); /////////////////////
-	if(strcmp("id", t->tokenName)==0) {
+	if(strcmp(firstAss, t->tokenName)==0) {
 		// printf(" n %c n ", fgetc(fptr));
 		t = getToken(fptr);
 		printToken();
@@ -83,19 +141,58 @@ void assign_stat() {
 		if(strcmp("=", t->tokenName)==0) {
 			assign_stat_prime();
 		}
-		else invalid();
+		else {
+			printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "=");
+			exit(0);
+		}
 	}
-	else invalid();
+	else {
+		printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, firstAss);
+		exit(0);
+	}
 }
 
 void printToken() {
 	printf("<%s, %d, %d>\n", t->tokenName, t->row, t->col);
 }
 
+// void program() {
+// 	t = getToken(fptr);
+// 	printToken();
+// 	if(strcmp("main", t->tokenName)==0) {
+// 		t = getToken(fptr);
+// 		printToken();
+// 		if(strcmp("(", t->tokenName)==0) {
+// 			t = getToken(fptr);
+// 			printToken();
+// 			if(strcmp(")", t->tokenName)==0) {
+// 				t = getToken(fptr);
+// 				printToken();
+// 				if(strcmp("{", t->tokenName)==0) {
+// 					declarations();
+// 					// printf(" check after\n"); /////////////////////////
+// 					assign_stat();
+// 					// printf(" check after prime\n"); /////////////////////////
+// 					t = getToken(fptr);
+// 					printToken();
+// 					if(strcmp("}", t->tokenName)==0) {
+// 						return;
+// 					}
+// 					else invalid();
+// 				}
+// 				else invalid();
+// 			}
+// 			else invalid();
+// 		}
+// 		else invalid();
+// 	}
+// 	else invalid();
+// }
+
 void program() {
 	t = getToken(fptr);
 	printToken();
-	if(strcmp("main", t->tokenName)==0) {
+	if(strcmp(firstProgram, t->tokenName)==0) {
 		t = getToken(fptr);
 		printToken();
 		if(strcmp("(", t->tokenName)==0) {
@@ -106,23 +203,38 @@ void program() {
 				printToken();
 				if(strcmp("{", t->tokenName)==0) {
 					declarations();
-					// printf(" check after\n"); /////////////////////////
+					//////////////////////////////////
 					assign_stat();
-					// printf(" check after prime\n"); /////////////////////////
+					///////////////////////////////////////
 					t = getToken(fptr);
 					printToken();
 					if(strcmp("}", t->tokenName)==0) {
 						return;
 					}
-					else invalid();
+					else {
+						printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "}");
+						exit(0);
+					}
 				}
-				else invalid();
+				else {
+					printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "{");
+					exit(0);
+				}
 			}
-			else invalid();
+			else {
+				printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, ")");
+				exit(0);
+			}
 		}
-		else invalid();
+		else {
+			printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "(");
+			exit(0);
+		}
 	}
-	else invalid();
+	else {
+		printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, firstProgram);
+		exit(0);
+	}
 }
 
 int main() {
