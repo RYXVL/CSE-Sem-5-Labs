@@ -222,8 +222,8 @@ struct token* getToken(FILE* fptr) {
 					if(c=='(') insertSymbolTable(buff, "FUNC", dbuff);
                     else insertSymbolTable(buff, dbuff, "NULL");
 				}
-				printf("buff %s\n", buff); //////////////////////
-				printf("char %c\n", c); ///////////////
+				// printf("buff %s\n", buff); //////////////////////
+				// printf("char %c\n", c); ///////////////
 			    strcpy(newToken->tokenName, "id");
 				memset(buff, 0, 50);
 				if(c==';' || c=='(') {
