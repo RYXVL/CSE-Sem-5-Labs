@@ -1,0 +1,42 @@
+program -> main () { declarations statement_list }
+
+declarations -> data_type identifier_list; declarations | E
+
+data_type -> int | char
+
+old productions: -
+////////
+identifier_list -> id | id, identifier_list | id[NUM], identifier_list | id[NUM]
+///////
+new productions: -
+///////
+identifier_list -> id identifier_list_prime
+identifier_list_prime -> , identifier_list | [NUM]identifier_list_prime_prime | E
+identifier_list_prime_prime -> , identifier_list | E
+////////
+
+statement_list -> statement statement_list | E
+
+statement -> assign_stat;
+
+assign_stat -> id = expn
+
+expn -> simple_expn eprime
+
+simple_expn -> term seprime
+
+term -> factor tprime
+
+factor -> id | NUM
+
+relop -> == | != | <= | >= | < | >
+
+tprime -> mulop factor tprime | E
+
+seprime -> addop term seprime | E
+
+addop -> + | -
+
+eprime -> relop simple_expn | E
+
+mulop -> * | / | %
