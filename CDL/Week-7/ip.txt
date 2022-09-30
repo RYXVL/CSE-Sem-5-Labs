@@ -1,9 +1,4 @@
-#include <stdio>
-
-// this is a comment
-
 main() {
-    int abc, bc;
-    char xyz;
-    abc=5;
+    char a;
+    b=10;
 }$
