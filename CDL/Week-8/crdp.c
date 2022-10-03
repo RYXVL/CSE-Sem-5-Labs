@@ -232,7 +232,6 @@ identifier_list() {
 	}
 }
 
-
 identifier_list_prime() {
 	t = getToken(fptr);
 	printToken();
