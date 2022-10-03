@@ -32,7 +32,7 @@ char* followDataType = "id";
 char* firstIDList = "id";
 char* followIDList = ";";
 
-char* firstIDListPrime = {",", "["};
+char firstIDListPrime[2][10] = {",", "["};
 int findfirstIDListPrime(char *str) {
 	for(int i=0; i<2; i++)
 		if(strcmp(firstIDListPrime[i], str)==0) return i;
@@ -195,27 +195,21 @@ int findfollowMulop(char *str) {
 // recursive functions for all the different productions
 
 void declarations() {
-	// if(findfirstDeclaration(t->tokenName)!=-1) {
+	t = getToken(fptr);
+	printToken();
+	if(strcmp(firstIDList, t->tokenName)==0)
 		identifier_list();
-		if(strcmp(";", t->tokenName)==0) {
-			declarations();
-		}
-		else {
-			printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, ";");
-			exit(0);
-		}
-	// }
-	// else if(findfollowDeclaration(t->tokenName)!=-1) return;
-	// else {
-	// 	printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\" \"%s\" or \"%s\".\n", t->row, t->col, "int", "char", "id", "}");
-	// 	exit(0);
-	// }
+	else return;
+	if(strcmp(";", t->tokenName)==0)
+		declarations();
+	else {
+		printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, ";");
+		exit(0);
+	}
 }
 
 identifier_list() {
-	t = getToken(fptr);
-	printToken();
-	if(strcmp("id", t->tokenName)!=-1) {
+		if(strcmp("id", t->tokenName)!=-1) {
 		t = getToken(fptr);
 		printToken();
 		if(findfirstIDListPrime(t->tokenName)!=-1)
@@ -233,69 +227,106 @@ identifier_list() {
 }
 
 identifier_list_prime() {
-	t = getToken(fptr);
-	printToken();
-	if(findfirstIDListPrime(t->tokenName)!=-1) {
-		if(strcmp(t->tokenName, ",")==0)
-			identifier_list();
-		else  {
+	if(strcmp(t->tokenName, ",")==0)
+		identifier_list();
+	else  {
+		t = getToken(fptr);
+		printToken();
+		if(strcmp(t->tokenName, "NUM")==0) {
 			t = getToken(fptr);
 			printToken();
-			if(strcmp(t->tokenName, "NUM")==0) {
+			if(strcmp(t->tokenName, "]")==0) {
 				t = getToken(fptr);
 				printToken();
-				if(strcmp(t->tokenName, "]")==0) {
+				if(strcmp(firstIDListPrimePrime, t->tokenName)==0)
 					identifier_list_prime_prime();
-				}
+				else if(strcmp(followIDListPrimePrime, t->tokenName)==0)
+					return;
 				else {
-					printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "]");
+					printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, ",", ";");
 					exit(0);
 				}
 			}
 			else {
-				printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "NUM");
+				printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "]");
 				exit(0);
 			}
 		}
-	}
-	else if(strcmp(followIDListPrime, t->tokenName)==0) {
-		return;
-	}
-	else {
-		printf("Error at row: %d, col: %d, expected \"%s\", \"%s\" or \"%s\".\n", t->row, t->col, ",", "[", ";");
-		exit(0);
+		else {
+			printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "NUM");
+			exit(0);
+		}
 	}
 }
 
 identifier_list_prime_prime() {
+	identifier_list();
+}
+
+void statementList() {
+	statement();
 	t = getToken(fptr);
 	printToken();
-	if(strcmp(firstIDListPrimePrime, t->tokenName)==0) {
-		identifier_list();
-	}
-	else if(strcmp(followIDListPrime, t->tokenName)==0) {
-		return;
-	}
+	if(strcmp(firstStatementList, t->tokenName)==0) statementList();
+	else if(strcmp(followStatementList, t->tokenName)==0) return;
 	else {
-		printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, ",", ";");
+		printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, "id", "}");
 		exit(0);
 	}
 }
 
+void statement() {
+	assignStat();
+}
 
-
-
-
-void ePrime() {
-	if(findfirstEprime(t->tokenName)!=-1) {
-		t = getToken(fptr);
-		printToken();
-		simpleExpn();
-	}
+void assignStat() {
+	t = getToken(fptr);
+	printToken();
+	if(strcmp(t->tokenName, "=")==0) expn();
 	else {
-		printf("Error at row: %d, col: %d, expected \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" or \"%s\".\n", t->row, t->col, "==", "!=", "<=", ">=", "<", ">");
+		printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "=");
 		exit(0);
 	}
+}
+
+void expn() {
+	t = getToken(fptr);
+	printToken();
+	if(findfirstExpn(t->tokenName)!=-1) {
+		simpleExpn();
+		if(findfirstEprime(t->tokenName)!=-1)
+			ePrime();
+		else if(findfollowEprime(t->tokenName)!=-1) return;
+		else {
+			printf("Error at row: %d, col: %d, expected \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", or \"%s\".\n", t->row, t->col, "id", "}", "==", "!=", "<=", ">=", "<", ">");
+			exit(0);
+		}
+	}
+	else {
+		printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, "id", "NUM");
+		exit(0);
+	}
+}
+
+void simpleExpn() {
+		term();
+		if(findfirstSeprime(t->tokenName)!=-1) sePrime();
+		else if(findfollowSeprime(t->tokenName)!=-1) return;
+		else {
+			printf("Error at row: %d, col: %d, expected \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", or \"%s\".\n", t->row, t->col, "id", "}", "+", "-", "==", "!=", "<=", ">=", "<", ">");
+			exit(0);
+		}
+}
+
+void ePrime() {
+		t = getToken(fptr);
+		printToken();
+		if(findfirstSimpleExpn(t->tokenName)!=-1)
+			simpleExpn();
+		else {
+			printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, "id", "NUM");
+			exit(0);
+		}
 }
 
 void term() {
@@ -331,10 +362,6 @@ void factor() {
 }
 
 void tPrime() {
-	if(findfirstMulop(t->tokenName)==-1) {
-		printf("Error at row: %d, col: %d, expected \"%s\", \"%s\" or \"%s\".\n", t->row, t->col, "*", "/", "%");
-		exit(0);
-	}
 	t = getToken(fptr);
 	printToken();
 	factor();
@@ -347,69 +374,6 @@ void tPrime() {
 		exit(0);
 	}
 }
-
-void simpleExpn() {
-	if(findfirstSimpleExpn(t->tokenName)!=-1) {
-		term();
-		sePrime();
-	}
-	else {
-		printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, "id", "NUM");
-		exit(0);
-	}
-}
-
-void expn() {
-	t = getToken(fptr);
-	printToken();
-	if(findfirstExpn(t->tokenName)!=-1) {
-		simpleExpn();
-		ePrime();
-	}
-	else {
-		printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, "id", "NUM");
-		exit(0);
-	}
-}
-
-void assignStat() {
-	if(strcmp(firstAssignStat, t->tokenName)==0) {
-		t = getToken(fptr);
-		printToken();
-		if(strcmp(t->tokenName, "=")==0) expn();
-		else {
-			printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "=");
-			exit(0);
-		}
-	}
-	else {
-		printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "id");
-		exit(0);
-	}
-}
-
-void statement() {
-	if(strcmp(firstStatement, t->tokenName)==0) {
-		assignStat();
-	}
-	else {
-		printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "id");
-		exit(0);
-	}
-}
-
-void statementList() {
-	if(strcmp(firstStatementList, t->tokenName)==0) {
-		statement();
-		statementList();
-	}
-	else if(strcmp(followStatementList, t->tokenName)==0) return;
-	else {
-		printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, "id");
-		exit(0);
-	}
-}
-
 
 void printToken() {
 	printf("<%s, %d, %d>\n", t->tokenName, t->row, t->col);
@@ -431,11 +395,8 @@ void program() {
 					t = getToken(fptr);
 					printToken();
 					if(findfirstDeclaration(t->tokenName)!=-1) {
-						// printf("%s - check\n", t->tokenName);
-						declarations(); ////////////////////////////////////////////////////////// innnnnnn
-						t = getToken(fptr);
-						printToken();
-						if(strcmp(firstStatementList, t->tokenName)==0) statementList(); /////////////////////////////////////////
+						declarations();
+						if(strcmp(firstStatementList, t->tokenName)==0) statementList();
 						else if(strcmp(followStatementList, t->tokenName)==0) return;
 						else {
 							printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, "id", "}");
@@ -443,7 +404,7 @@ void program() {
 						}
 					}
 					else if(findfollowDeclaration(t->tokenName)!=-1) {
-						if(strcmp(firstStatementList, t->tokenName)==0) statementList(); //////////////////////////////////////////////
+						if(strcmp(firstStatementList, t->tokenName)==0) statementList();
 						else if(strcmp(followStatementList, t->tokenName)==0) return;
 						else {
 							printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, "id", "}");
