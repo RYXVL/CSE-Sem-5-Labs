@@ -200,8 +200,31 @@ void declarations() {
 	if(strcmp(firstIDList, t->tokenName)==0)
 		identifier_list();
 	else return;
-	if(strcmp(";", t->tokenName)==0)
-		declarations();
+	if(strcmp(";", t->tokenName)==0) {
+		t = getToken(fptr);
+		printToken();
+		if(findfirstDeclaration(t->tokenName)!=-1) {
+			declarations();
+			if(strcmp(firstStatementList, t->tokenName)==0) statementList();
+			else if(strcmp(followStatementList, t->tokenName)==0) return;
+			else {
+				printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, "id", "}");
+				exit(0);
+			}
+		}
+		else if(findfollowDeclaration(t->tokenName)!=-1) {
+			if(strcmp(firstStatementList, t->tokenName)==0) statementList();
+			else if(strcmp(followStatementList, t->tokenName)==0) return;
+			else {
+				printf("Error at row: %d, col: %d, expected \"%s\" or \"%s\".\n", t->row, t->col, "id", "}");
+				exit(0);
+			}
+		}
+		else {
+			printf("Error at row: %d, col: %d, expected \"%s\", \"%s\", \"%s\" or \"%s\".\n", t->row, t->col, "int", "char", "id", "}");
+			exit(0);
+		}
+	}
 	else {
 		printf("Error at row: %d, col: %d, expected \"%s\".\n", t->row, t->col, ";");
 		exit(0);
