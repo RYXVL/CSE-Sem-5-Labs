@@ -191,6 +191,14 @@ struct token* getToken(FILE* fptr) {
 				c = fgetc(fptr);
 				col++;
 			}
+			else {
+				col--;
+				newToken->col = col;
+				newToken->row = row;
+				strcpy(newToken->tokenName, "/");
+				fseek(fptr, -1, SEEK_CUR);
+				return newToken;
+			}
 			goto loop;
 		}
 		if(isalpha(c)!=0) {
