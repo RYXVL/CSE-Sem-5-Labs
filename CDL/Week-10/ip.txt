@@ -1,0 +1,4 @@
+int a = 0;
+printf
+scanf
+scanf
