@@ -1,0 +1,2 @@
+Q1: lsblk
+Q3: sudo fdisk -l /dev/sdb
