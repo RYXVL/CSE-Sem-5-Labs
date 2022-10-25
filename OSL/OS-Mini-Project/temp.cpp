@@ -110,6 +110,7 @@ void DiskSchedulingPolicy::startDemo(){
                 cout<<"Unsupported choice. Please try again.";
         }
     }
+
 }
 
 void DiskSchedulingPolicy::printAverageSeekTime(int totalHeadMovement, int totalLength){
@@ -124,6 +125,7 @@ void DiskSchedulingPolicy::FCFS()
     vector<int> orderOfProcessing(queueLength);
     int totalHeadMovement = 0;
     int currentHead = globalCurrentHead;
+
     cout << endl;
     cout << "\t\t+--------------------------------------+" << endl;
     cout << "\t\t|Output for FCFS Disk Scheduling Policy|" << endl;
@@ -155,7 +157,6 @@ void DiskSchedulingPolicy::FCFS()
 
 void DiskSchedulingPolicy::SSTF()
 {
-    // cout << queueLength << endl; ///////////////////////////////////
     vector<int> orderOfProcessing(queueLength);
     int totalHeadMovement = 0;
     int currentHead = globalCurrentHead;
@@ -165,23 +166,18 @@ void DiskSchedulingPolicy::SSTF()
     cout << "\t\t|Output for SSTF Disk Scheduling Policy|" << endl;
     cout << "\t\t+--------------------------------------+" << endl;
     cout << "\n\tHead currently at: " << currentHead << endl;
-
     cout << "\n     Iteration \t Current Head \t Disk Movement \t Total Disk Movement" << endl;
     cout << "------------------------------------------------------------------------" << endl;
 
     vector<bool> traversed(queueLength);
     for (int i = 0; i < queueLength; ++i)
     {
-
         int minimumDifference = INT_MAX, index = -1;
-
         for (int j = 0; j < queueLength; ++j)
         {
-
             if (currentHead != requestQueue[j] && !traversed[j])
             {
                 int currentDifference = abs(currentHead - requestQueue[j]);
-
                 if (currentDifference < minimumDifference)
                 {
                     minimumDifference = currentDifference;
@@ -189,12 +185,10 @@ void DiskSchedulingPolicy::SSTF()
                 }
             }
         }
-
         totalHeadMovement += minimumDifference;
         orderOfProcessing[i] = requestQueue[index];
         currentHead = requestQueue[index];
         traversed[index] = true;
-
         cout << "\t" << (i + 1) << "\t\t" << currentHead << "\t\t" << minimumDifference << "\t\t" << totalHeadMovement << endl;
     }
     cout << "------------------------------------------------------------------------" << endl;
@@ -211,12 +205,9 @@ void DiskSchedulingPolicy::SSTF()
 
 void DiskSchedulingPolicy::SCAN()
 {
-
-    /////////////////////////////////////////////////////////////////////
-    cout << "Enter the page limit: ";
+    cout << "Enter the Page Limit: ";
     int limit;
     cin >> limit;
-    /////////////////////////////////////////////////////////////////////
 
     vector<int> orderOfProcessing(queueLength + 1);
     int totalHeadMovement = 0;
@@ -257,11 +248,8 @@ void DiskSchedulingPolicy::SCAN()
     cout << "\t\t|Output for SCAN Disk Scheduling Policy|" << endl;
     cout << "\t\t+--------------------------------------+" << endl;
     cout << "\n\tHead currently at: " << currentHead << endl;
-
     cout << "\n     Iteration \t Current Head \t Disk Movement \t Total Disk Movement" << endl;
     cout << "------------------------------------------------------------------------" << endl;
-
-    // cout << "ryan sojan" << secondHalf[secondHalf.size()-1] << endl;
 
     int j = 0;
     // inner track first
@@ -269,12 +257,10 @@ void DiskSchedulingPolicy::SCAN()
     {
         for (int i = firstHalf.size() - 1; i >= 0; --i)
         {
-
             int currentDiskMovement = abs(currentHead - firstHalf[i]);
             totalHeadMovement += currentDiskMovement;
             orderOfProcessing[j] = firstHalf[i];
             currentHead = firstHalf[i];
-
             cout << "\t" << (++j) << "\t\t" << currentHead << "\t\t" << currentDiskMovement << "\t\t" << totalHeadMovement << endl;
         }
 
@@ -292,20 +278,17 @@ void DiskSchedulingPolicy::SCAN()
             totalHeadMovement += currentDiskMovement;
             orderOfProcessing[j] = secondHalf[i];
             currentHead = secondHalf[i];
-
             cout << "\t" << (++j) << "\t\t" << currentHead << "\t\t" << currentDiskMovement << "\t\t" << totalHeadMovement << endl;
         }
     }
     else
     {
-        // cout << "ryan sojan" << secondHalf[secondHalf.size()-1] << endl;
         for (int i = 0; i < secondHalf.size(); i++)
         {
             int currentDiskMovement = abs(currentHead - secondHalf[i]);
             totalHeadMovement += currentDiskMovement;
             orderOfProcessing[j] = secondHalf[i];
             currentHead = secondHalf[i];
-
             cout << "\t" << (++j) << "\t\t" << currentHead << "\t\t" << currentDiskMovement << "\t\t" << totalHeadMovement << endl;
         }
 
@@ -321,7 +304,6 @@ void DiskSchedulingPolicy::SCAN()
             totalHeadMovement += currentDiskMovement;
             orderOfProcessing[j] = firstHalf[i];
             currentHead = firstHalf[i];
-
             cout << "\t" << (++j) << "\t\t" << currentHead << "\t\t" << currentDiskMovement << "\t\t" << totalHeadMovement << endl;
         }
     }
@@ -339,12 +321,9 @@ void DiskSchedulingPolicy::SCAN()
 
 void DiskSchedulingPolicy::CSCAN()
 {
-
-    /////////////////////////////////////////////////////////////////////
     cout << "Enter the page limit: ";
     int limit;
     cin >> limit;
-    /////////////////////////////////////////////////////////////////////
 
     // "requestQueue.length + 2" since, both the extra ends will be added to the queue;
     vector<int> orderOfProcessing(queueLength + 2);
@@ -361,6 +340,7 @@ void DiskSchedulingPolicy::CSCAN()
         else
             secondHalf.push_back(requestQueue[i]);
     }
+
     sort(firstHalf.begin(), firstHalf.end());
     sort(secondHalf.begin(), secondHalf.end());
 
@@ -368,7 +348,6 @@ void DiskSchedulingPolicy::CSCAN()
     for (int i = 0; i < firstHalf.size(); i++)
         cout << firstHalf[i] << " ";
     cout << "]";
-
     cout << "[";
     for (int i = 0; i < secondHalf.size(); i++)
         cout << secondHalf[i] << " ";
@@ -392,7 +371,6 @@ void DiskSchedulingPolicy::CSCAN()
     {
         for (int i = firstHalf.size() - 1; i >= 0; --i)
         {
-
             int currentDiskMovement = abs(currentHead - firstHalf[i]);
             totalHeadMovement += currentDiskMovement;
             orderOfProcessing[j] = firstHalf[i];
@@ -418,11 +396,9 @@ void DiskSchedulingPolicy::CSCAN()
             totalHeadMovement += currentDiskMovement;
             orderOfProcessing[j] = secondHalf[i];
             currentHead = secondHalf[i];
-
             cout << "\t" << (++j) << "\t\t" << currentHead << "\t\t" << currentDiskMovement << "\t\t" << totalHeadMovement << endl;
         }
     }
-
     // Outer Track First;
     else
     {
@@ -432,7 +408,6 @@ void DiskSchedulingPolicy::CSCAN()
             totalHeadMovement += currentDiskMovement;
             orderOfProcessing[j] = secondHalf[i];
             currentHead = secondHalf[i];
-
             cout << "\t" << (++j) << "\t\t" << currentHead << "\t\t" << currentDiskMovement << "\t\t" << totalHeadMovement << endl;
         }
 
@@ -454,7 +429,6 @@ void DiskSchedulingPolicy::CSCAN()
             totalHeadMovement += currentDiskMovement;
             orderOfProcessing[j] = firstHalf[i];
             currentHead = firstHalf[i];
-
             cout << "\t" << (++j) << "\t\t" << currentHead << "\t\t" << currentDiskMovement << "\t\t" << totalHeadMovement << endl;
         }
     }
@@ -473,16 +447,20 @@ void DiskSchedulingPolicy::LOOK(){
     vector<int> orderOfProcessing(queueLength);
     int totalHeadMovement = 0;
     int currentHead = globalCurrentHead;
+
     vector<int> firstHalf;
     vector<int> secondHalf;
+
     for(int i = 0; i < queueLength; ++i) {
         if(currentHead > requestQueue[i])
             firstHalf.push_back(requestQueue[i]);
         else
             secondHalf.push_back(requestQueue[i]);
     }
+
     sort(firstHalf.begin(), firstHalf.end());   
     sort(secondHalf.begin(), secondHalf.end());
+
     cout<<"[ ";
     for(int i=0; i<firstHalf.size(); i++) {
         cout << firstHalf[i] << " ";
@@ -492,21 +470,23 @@ void DiskSchedulingPolicy::LOOK(){
         cout << secondHalf[i] << " ";
     }
     cout<<"]";
+
     cout << "\nTraverse to the inner track or the outer track? \n [0] Inner Track\n [1] Outer Track \n Your Choice? ";
     int outer;
     cin >> outer;
+
     cout << endl;
     cout << "\t\t+--------------------------------------+" << endl;
     cout << "\t\t|Output for LOOK Disk Scheduling Policy|" << endl;
     cout << "\t\t+--------------------------------------+" << endl;
     cout << "\n\tHead currently at: " << currentHead << endl;        
     cout << "\n     Iteration \t Current Head \t Disk Movement \t Total Disk Movement" << endl;
-    cout << "------------------------------------------------------------------------" << endl;        
+    cout << "------------------------------------------------------------------------" << endl;
+
     int j = 0;
     // inner track first
     if(outer == 0) {
         for(int i = firstHalf.size() - 1; i >= 0; --i) {
-            
             int currentDiskMovement = abs(currentHead - firstHalf[i]);
             totalHeadMovement += currentDiskMovement;
             orderOfProcessing[j] = firstHalf[i];
@@ -537,6 +517,7 @@ void DiskSchedulingPolicy::LOOK(){
             cout << "\t" << (++j) << "\t\t" << currentHead << "\t\t" << currentDiskMovement << "\t\t" << totalHeadMovement << endl;
         }
     }
+
     cout << "------------------------------------------------------------------------" << endl;
     cout << "\n\tTotal Head Movement: " << totalHeadMovement << endl;
     cout << "\n\tOrder of Processing: " << (orderOfProcessing[0]);
@@ -552,16 +533,20 @@ void DiskSchedulingPolicy::CLOOK(){
     vector<int> orderOfProcessing(queueLength);
     int totalHeadMovement = 0;
     int currentHead = globalCurrentHead;
+
     vector<int> firstHalf;
     vector<int> secondHalf;
+
     for(int i = 0; i < queueLength; ++i) {
         if(currentHead > requestQueue[i])
         firstHalf.push_back(requestQueue[i]);
         else
         secondHalf.push_back(requestQueue[i]);
     }
+
     sort(firstHalf.begin(), firstHalf.end());   
-    sort(secondHalf.begin(), secondHalf.end());  
+    sort(secondHalf.begin(), secondHalf.end());
+
     cout<<"[ "; 
     for(int i=0; i<firstHalf.size(); i++) {
         cout << firstHalf[i] << " ";
@@ -570,10 +555,12 @@ void DiskSchedulingPolicy::CLOOK(){
     for(int i=0; i<secondHalf.size(); i++) {
         cout << secondHalf[i] << " ";
     }    
-    cout<<"]"; 
+    cout<<"]";
+
     cout << "\nTraverse to the inner track or the outer track? \n [0] Inner Track\n [1] Outer Track \n Your Choice? ";
     int outer;
     cin >> outer;
+
     cout << endl;
     cout << "\t\t+----------------------------------------+" << endl;
     cout << "\t\t|Output for C-LOOK Disk Scheduling Policy|" << endl;
@@ -581,6 +568,7 @@ void DiskSchedulingPolicy::CLOOK(){
     cout << "\n\tHead currently at: " << currentHead << endl;
     cout << "\n     Iteration \t Current Head \t Disk Movement \t Total Disk Movement" << endl;
     cout << "------------------------------------------------------------------------" << endl;
+
     int j = 0;
     // inner track first
     if(outer == 0) {
@@ -615,6 +603,7 @@ void DiskSchedulingPolicy::CLOOK(){
             cout << "\t" << (++j) << "\t\t" << currentHead << "\t\t" << currentDiskMovement << "\t\t" << totalHeadMovement << endl;
         }
     }
+    
     cout << "------------------------------------------------------------------------" << endl;
     cout << "\n\tTotal Head Movement: " << totalHeadMovement << endl;
     cout << "\n\tOrder of Processing: " << (orderOfProcessing[0]);
