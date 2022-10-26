@@ -1,4 +1,9 @@
-int a = 0;
-printf
-scanf
-scanf
+#include <stdio.h>
+
+// this iS A commeNT
+
+int main() {
+    WSP();
+    Printf("alpha");
+    returN 0;
+}
