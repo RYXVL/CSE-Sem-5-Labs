@@ -5,7 +5,7 @@
 %}
 
 %%
-[a,b,c,d,e,A,E,I,O,U] {vowels++;}
+[a,e,i,o,u,A,E,I,O,U] {vowels++;}
 [a-zA-Z] {consonants++;}
 %%
 
