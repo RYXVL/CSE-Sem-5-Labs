@@ -3,10 +3,12 @@
 #include <semaphore.h>
 
 sem_t semaphore;
+int val;
 
 void* func1() {
     printf("Thread 1\n");
     sem_post(&semaphore);
+    sem_getvalue(&semaphore, &val);
 }
 
 void* func2() {
