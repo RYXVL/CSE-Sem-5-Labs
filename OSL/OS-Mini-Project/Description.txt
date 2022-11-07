@@ -1,0 +1,15 @@
+Project Title: Demonstrate the use of various disk schedulling algorithms.
+
+Following are the steps to use the code: -
+1. The I/O requests can be given manually to the code or the code can use the already hardcorded values inside.
+   (1-Manual Insertion ; 0-Hardcoded Values)
+   On entering 1 the I/O request queue length has to be specified and the corresponding request values have to be given thereafter.
+2. All the different algorithms (FCFS, SSTF, SCAN, C-SCAN, LOOK, C-LOOK) have been constructed as seperate modules and can be chosen
+   to be used as user pleases to.
+3. All algorithms would ask for the manual insertion for the current head value (initial head value).
+4. Some algorithms like SCAN, C-SCAN, LOOK and C-LOOK will ask for an additional information i.e., chosing to run the algorithm on
+   the inner or the outer track first. Inner track represents going towards the lower numbered requests first and outer track represents
+   going towards the higher numbered requests first.
+5. Depending on the algorithm chosen a table consisting of the iteration number, current head (after movement), amount of disc movement to reach this
+   current head value and the overall disk movement so far will be displayed, followed by the total head movement (after the completion of the algorithm),
+   order of processing the I/O requests, and the average seek time required in the algorithm used by the user.
