@@ -1,0 +1,13 @@
+Project title: Capture the TLS handshaking and figure out the types of cipher suits in use in all the sessions.
+
+Our codes will be demonstrating the use of two key exhange algorithms used in cipher suits: -
+1. RSA Algorithm
+2. Diffie-Hellman Algorithm
+
+RSA algorithm uses a number as a message to be transferred, generates the secret keys that are same on the client 
+and the server side. Client uses it to encrpyt the message before sending it, and the server uses it to decrypt 
+the message when it is received.
+
+Hellman-Diffie algorithm uses public keys shared by the client and the server, private keys that are unique to each side, 
+and the secret keys for the client and the server which will be used to encrpyt and decrypt the message respectively 
+when necessary.
